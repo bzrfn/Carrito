@@ -42,6 +42,7 @@ function saveCart() {
   localStorage.setItem('cart', JSON.stringify(cart));
 }
 
+// Funciones para persistir los productos en localStorage
 function loadProducts() {
   const cochesStored = localStorage.getItem('coches');
   const accesoriosStored = localStorage.getItem('accesorios');
@@ -186,7 +187,7 @@ window.addEventListener("storage", (e) => {
 
 document.addEventListener("DOMContentLoaded", () => {
   loadProducts();
-  loadCart(); // Se carga el carrito desde localStorage
+  loadCart();
   if (document.querySelector('.products-container')) displayProductsCategory();
   if (document.querySelector('.featured-container')) displayFeatured();
   displayCart();
