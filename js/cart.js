@@ -28,6 +28,20 @@ let accesorios = [
 let currentCategory = "coches";
 let cart = [];
 
+// Funciones para persistir el carrito en localStorage
+function loadCart() {
+  const storedCart = localStorage.getItem('cart');
+  if (storedCart) {
+    cart = JSON.parse(storedCart);
+  } else {
+    cart = [];
+  }
+}
+
+function saveCart() {
+  localStorage.setItem('cart', JSON.stringify(cart));
+}
+
 function loadProducts() {
   const cochesStored = localStorage.getItem('coches');
   const accesoriosStored = localStorage.getItem('accesorios');
@@ -50,7 +64,6 @@ function displayProductsCategory() {
   if (!productsContainer || !categoryTitle) return;
 
   productsContainer.innerHTML = "";
-
   let productsToDisplay = currentCategory === "coches" ? coches : accesorios;
   categoryTitle.textContent = currentCategory.charAt(0).toUpperCase() + currentCategory.slice(1);
 
@@ -108,7 +121,9 @@ function addToCart(productId, category) {
   const product = (category === "coches" ? coches : accesorios).find(p => p.id === productId);
   if (product) {
     cart.push(product);
+    saveCart();
     displayCart();
+    updateCartCount();
     showAddedMessage(product.name);
   }
 }
@@ -122,21 +137,25 @@ function showAddedMessage(productName) {
     message.classList.add('fade-out');
   }, 1000);
   setTimeout(() => {
-    document.body.removeChild(message);
+    if (message && message.parentNode) {
+      message.parentNode.removeChild(message);
+    }
   }, 2000);
 }
 
 function removeFromCart(index) {
   cart.splice(index, 1);
+  saveCart();
   displayCart();
+  updateCartCount();
 }
 
 function displayCart() {
   const cartContainer = document.querySelector('.cart-container');
   if (!cartContainer) return;
 
-  cartContainer.innerHTML = cart.length
-    ? cart.map((item, index) => `
+  if (cart.length > 0) {
+    cartContainer.innerHTML = cart.map((item, index) => `
       <div class="cart-item">
         <img src="${item.image}" alt="${item.name}">
         <div class="item-info">
@@ -144,10 +163,11 @@ function displayCart() {
           <p>Precio: $${item.price}</p>
         </div>
         <button onclick="removeFromCart(${index})">Eliminar</button>
-      </div>`).join('')
-    : "<p>El carrito está vacío.</p>";
-
-  updateCartCount();
+      </div>
+    `).join('');
+  } else {
+    cartContainer.innerHTML = "<p>El carrito está vacío.</p>";
+  }
 }
 
 function updateCartCount() {
@@ -157,6 +177,7 @@ function updateCartCount() {
 
 document.addEventListener("DOMContentLoaded", () => {
   loadProducts();
+  loadCart(); // Cargamos el carrito desde localStorage para conservar los productos agregados
   if (document.querySelector('.products-container')) displayProductsCategory();
   if (document.querySelector('.featured-container')) displayFeatured();
   displayCart();
