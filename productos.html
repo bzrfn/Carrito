@@ -18,7 +18,6 @@
             <a href="#" id="accesoriosLink">Accesorios</a>
           </div>
         </li>
-       
         <li>
           <a href="#" id="cartLink">
             <img src="images/carrito.png" alt="Carrito" class="cart-icon">
@@ -32,7 +31,9 @@
   <main>
     <section id="categoria">
       <h2 id="categoryTitle">Coches</h2>
-      <div class="products-container"></div>
+      <div class="products-container">
+        <!-- Aquí se cargarán los productos según la categoría -->
+      </div>
     </section>
   </main>
 
@@ -41,7 +42,9 @@
     <div class="modal-content">
       <span class="close">&times;</span>
       <h2>Carrito de Compras</h2>
-      <div class="cart-container"></div>
+      <div class="cart-container">
+        <!-- Items del carrito se insertan aquí -->
+      </div>
       <button id="purchaseBtn">Realizar Compra</button>
     </div>
   </div>
@@ -54,6 +57,7 @@
       displayCart();
       updateCartCount();
 
+      // Dropdown para seleccionar categoría
       const dropdown = document.querySelector(".dropdown-content");
       document.getElementById("productsDropdown").onclick = e => {
         e.preventDefault();
@@ -74,6 +78,7 @@
         dropdown.style.display = "none";
       };
 
+      // Eventos del modal del carrito
       const modal = document.getElementById("cartModal");
       document.getElementById("cartLink").onclick = e => {
         e.preventDefault();
@@ -83,10 +88,12 @@
       document.querySelector(".modal-content .close").onclick = () => modal.style.display = "none";
       window.onclick = e => { if (e.target == modal) modal.style.display = "none"; };
 
+      // Botón de compra: se vacía el carrito y se actualiza el localStorage
       document.getElementById("purchaseBtn").onclick = () => {
         if (cart.length > 0) {
           alert("¡Compra realizada con éxito!");
           cart = [];
+          saveCart();
           displayCart();
           updateCartCount();
         } else {
