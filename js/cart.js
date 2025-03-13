@@ -175,9 +175,18 @@ function updateCartCount() {
   if (countElement) countElement.textContent = cart.length;
 }
 
+// Escuchar cambios en localStorage para sincronizar el carrito entre páginas
+window.addEventListener("storage", (e) => {
+  if (e.key === "cart") {
+    loadCart();
+    displayCart();
+    updateCartCount();
+  }
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   loadProducts();
-  loadCart(); // Cargamos el carrito desde localStorage para conservar los productos agregados
+  loadCart(); // Se carga el carrito desde localStorage
   if (document.querySelector('.products-container')) displayProductsCategory();
   if (document.querySelector('.featured-container')) displayFeatured();
   displayCart();
