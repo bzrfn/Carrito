@@ -307,6 +307,21 @@ section h2 {
   top: -5px;
   right: -5px;
 }
+.toast-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 4px;
+  z-index: 1000;
+  transition: opacity 1s ease;
+}
+
+.toast-message.fade-out {
+  opacity: 0;
+}
 
 /* Media Queries */
 @media (max-width: 768px) {
